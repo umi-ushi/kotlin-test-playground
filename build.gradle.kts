@@ -34,4 +34,11 @@ kotlin {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+	testLogging {
+		events("passed", "skipped", "failed")
+	}
+	reports {
+		junitXml.required.set(true)
+		html.required.set(true)
+	}
 }
