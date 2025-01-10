@@ -42,3 +42,21 @@ tasks.withType<Test> {
 		html.required.set(true)
 	}
 }
+
+tasks.register<Test>("unitTest") {
+	group = "verification"
+	description = "This is Unit Test Task"
+
+	useJUnitPlatform {
+		includeTags("unit")
+	}
+}
+
+tasks.register<Test>("integrationTest") {
+	group = "verification"
+	description = "This is integration Test Task"
+
+	useJUnitPlatform {
+		includeTags("integration")
+	}
+}
