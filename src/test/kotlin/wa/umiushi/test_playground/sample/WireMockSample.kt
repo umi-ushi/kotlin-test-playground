@@ -8,6 +8,7 @@ import org.apache.http.protocol.HTTP
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory
 import org.springframework.web.client.RestClient
 import org.wiremock.spring.ConfigureWireMock
 import org.wiremock.spring.EnableWireMock
@@ -23,7 +24,16 @@ internal class WireMockSample(
     @Value("\${wiremock.server.baseUrl}")
     private val wireMockUrl: String
 ) {
-    private val client: RestClient = RestClient.create("$wireMockUrl/external")
+
+    private val client: RestClient = RestClient
+        .builder()
+        .requestFactory(HttpComponentsClientHttpRequestFactory().also {
+            it.setConnectionRequestTimeout(5000)
+            it.setConnectTimeout(5000)
+            it.setReadTimeout(5000)
+        })
+        .baseUrl("$wireMockUrl/external")
+        .build()
 
     @Test
     fun `get external api service`() {
